@@ -6,7 +6,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 
 const OrderTab = ({ items }) => {
-  const totalItem = items.length;
+  const pageSize = 6;
+  const pageCount = Math.ceil(items.length / pageSize);
+
+  const slides = [...new Array(pageCount).keys()];
+  // console.log(slides);
 
   const pagination = {
     clickable: true,
@@ -22,13 +26,19 @@ const OrderTab = ({ items }) => {
         modules={[Pagination]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {items.map((item) => (
-              <FoodCard key={item._id} item={item}></FoodCard>
-            ))}
-          </div>
-        </SwiperSlide>
+        {slides.map((index) => (
+          <>
+            <SwiperSlide>
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+                {items
+                  .slice(index * pageSize, (index + 1) * pageSize)
+                  .map((item) => (
+                    <FoodCard key={item._id} item={item}></FoodCard>
+                  ))}
+              </div>
+            </SwiperSlide>
+          </>
+        ))}
       </Swiper>
     </div>
   );
